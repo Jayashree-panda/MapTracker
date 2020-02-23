@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.6.0/dist/leaflet.css" />
+    <script src="https://unpkg.com/leaflet@1.6.0/dist/leaflet.js"></script>
+    <title>Client 2</title>
+    <style>
+      #map{
+        position:absolute;
+        top : 0;
+        bottom : 0;
+        left : 0;
+        right : 0;
+      }
+    </style>
+  </head>
+  <body>
+    <div id = "map"></div>
+      <script>
+        var map = L.map('map').setView([0,0],1)
+        L.tileLayer('https://api.maptiler.com/maps/streets/{z}/{x}/{y}.png?key=yl1LH4J8LokEufZo3gG8',{
+          attribution : '<a href="https://www.maptiler.com/copyright/" target="_blank">&copy; MapTiler</a> <a href="https://www.openstreetmap.org/copyright" target="_blank">&copy; OpenStreetMap contributors</a>',
+        }).addTo(map);
+      </script>
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/2.3.0/socket.io.js"></script>
+      <script>
+        const socket = io('http://localhost:3000');
+      </script>
+      <script>
+        let tracePath = []
+        socket.on('send-location-to-manager',function(data){
+        console.log(data);
+        console.log(data.lat);
+        let coord = [ data.lat, data.long ]
+        tracePath.push(coord)
+        for (i = 0; i < tracePath.length; i++) {
+          console.log(i,tracePath[i][0])
+          console.log(i,tracePath[i][1])
+        }
+        var marker = L.marker([data.long, data.lat]).addTo(map);
+        var polyline = L.polyline(tracePath, {color: 'red'}).addTo(map);
+        // zoom the map to the polyline
+        map.fitBounds(polyline.getBounds());
+        })
+      </script>
+  </body>
+</html>

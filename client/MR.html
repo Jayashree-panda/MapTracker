@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>I am MR! Track me</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/2.3.0/socket.io.dev.js"></script>
+    <script src="http://code.jquery.com/jquery-1.10.1.min.js"></script>
+  </head>
+  <body>
+  <h1>I am MR. Track me!</h1>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/2.3.0/socket.io.js"></script>
+    <script>
+      const socket = io('http://localhost:3000');
+    </script>
+    <script>
+          console.log("at MR")
+          let long = 51.5, lat = -0.09;  
+
+          function getLongLat(){
+            long = long + 0.1;
+            lat = lat + 0.1;
+            socket.emit('send-location-to-server',{ long:long,lat:lat })
+          }
+          let timerId = setInterval(getLongLat,5000)
+    </script>    
+  </body>
+</html>
